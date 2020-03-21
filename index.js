@@ -1,6 +1,4 @@
 const esutils = require('esutils');
-const addDefault = require('@babel/helper-module-imports').addDefault;
-const addNamed = require('@babel/helper-module-imports').addNamed;
 
 let isInsideJsxExpression = function (t, path) {
   if (!path.parentPath) {
@@ -16,8 +14,7 @@ module.exports = function (babel) {
   let t = babel.types;
 
   return {
-    name: 'transform-jsx-vue3',
-    inherits: require('@babel/plugin-syntax-jsx').default,
+    inherits: require('babel-plugin-syntax-jsx'),
     visitor: {
       JSXNamespacedName(path) {
         throw path.buildCodeFrameError(
@@ -39,7 +36,7 @@ module.exports = function (babel) {
           path.replaceWith(t.inherits(callExpr, path.node));
         },
       },
-      'Program'(path) {
+      'Program'(path,file) {
         path.traverse({
           'ObjectMethod|ClassMethod'(path) {
             const params = path.get('params');
@@ -65,7 +62,7 @@ module.exports = function (babel) {
             }
 
             // ------注入 h 函数
-            let h = addNamed(path, 'h', 'vue', { nameHint: '_h_render' });
+            let h = file.addImport('vue', 'h', '_h_render');
 
             path.get('body').unshiftContainer('body', t.variableDeclaration('const', [
               t.variableDeclarator(
@@ -115,7 +112,7 @@ module.exports = function (babel) {
 
     let attribs = path.node.attributes;
     if (attribs.length) {
-      attribs = buildOpeningElementAttributes(attribs, path);
+      attribs = buildOpeningElementAttributes(attribs, file);
       args.push(attribs);
     }
     return t.callExpression(t.identifier('h'), args);
@@ -146,7 +143,7 @@ module.exports = function (babel) {
    * all prior attributes to an array for later processing.
    */
 
-  function buildOpeningElementAttributes(attribs, path) {
+  function buildOpeningElementAttributes(attribs, file) {
     let _props = [];
     let objs = [];
 
@@ -178,7 +175,7 @@ module.exports = function (babel) {
       attribs = objs[0];
     } else if (objs.length) {
       // add prop merging helper
-      let helper = addDefault(path, 'babel-helper-vue-jsx-merge-props', { nameHint: '_mergeJSXProps' });
+      let helper = file.addImport('babel-helper-vue-jsx-merge-props', 'default', '_mergeJSXProps');
       // spread it
       attribs = t.callExpression(
         helper,
