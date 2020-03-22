@@ -175,7 +175,7 @@ module.exports = function (babel) {
       attribs = objs[0];
     } else if (objs.length) {
       // add prop merging helper
-      let helper = file.addImport('babel-helper-vue-jsx-merge-props', 'default', '_mergeJSXProps');
+      let helper = file.addImport('JSXUTIL', 'default', '_mergeJSXProps');
       // spread it
       attribs = t.callExpression(
         helper,
