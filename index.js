@@ -36,7 +36,7 @@ module.exports = function (babel) {
           path.replaceWith(t.inherits(callExpr, path.node));
         },
       },
-      'Program'(path,file) {
+      'Program'(path, file) {
         path.traverse({
           'ObjectMethod|ClassMethod'(path) {
             const params = path.get('params');
@@ -62,7 +62,7 @@ module.exports = function (babel) {
             }
 
             // ------注入 h 函数
-            let h = file.addImport('vue', 'h', '_h_render');
+            let h = file.addImport('JSXUTIL', 'dynamicRender', '_h_render');
 
             path.get('body').unshiftContainer('body', t.variableDeclaration('const', [
               t.variableDeclarator(

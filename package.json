@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/252675163/transform-jsx-vue3#readme",
   "dependencies": {
-    "esutils": "^2.0.2"
+    "esutils": "^2.0.2",
+    "vue": "3.0.0-alpha.8"
   },
   "peerDependencies": {
     "babel-helper-vue-jsx-merge-props": "^2.0.0"

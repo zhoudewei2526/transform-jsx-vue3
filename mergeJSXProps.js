@@ -1,6 +1,11 @@
-let nestRE = /^(on|nativeOn|class|style|hook)$/;
 
-export default function mergeJSXProps (objs) {
+let nestRE = /^(on|nativeOn|class|style|hook)$/;
+function firstWordCase(nestedKey) {
+  let nestedKeyArr = nestedKey.split('');
+  let upperCaseKey = nestedKeyArr.splice(0, 1, nestedKeyArr[0].toUpperCase()).join('');
+  return upperCaseKey;
+}
+export default function mergeJSXProps(objs) {
   return objs.reduce(function (a, b) {
     let aa, bb, key, nestedKey, temp;
     for (key in b) {
@@ -20,16 +25,16 @@ export default function mergeJSXProps (objs) {
             bb[temp] = true;
           }
         }
-        let isHook =false;
+        let isHook = false;
         if (key === 'on' || key === 'nativeOn' || (isHook = key === 'hook')) {
           // merge functions
           for (nestedKey in bb) {
-            if(isHook){
+            if (isHook) {
               aa[nestedKey] = mergeFn(aa[nestedKey], bb[nestedKey]);
-            }else{
-              let nestedKeyArr = nestedKey.split('');
-              let upperCaseKey = nestedKeyArr.splice(0,1,nestedKeyArr[0].toUpperCase()).join('');
-              aa['on'+upperCaseKey] = mergeFn(aa[nestedKey], bb[nestedKey]);
+            } else {
+              let upperCaseKey = firstWordCase(nestedKey);
+
+              aa['on' + upperCaseKey] = mergeFn(aa[nestedKey], bb[nestedKey]);
             }
           }
           a = aa;
@@ -42,11 +47,11 @@ export default function mergeJSXProps (objs) {
             aa[nestedKey] = bb[nestedKey];
           }
         }
-      } else if (/^(attrs|props)$/.test(key)){
-        for (let subkey in b[key]){
-          a[subkey] = b[key][subkey]
+      } else if (/^(attrs|props)$/.test(key)) {
+        for (let subkey in b[key]) {
+          a[subkey] = b[key][subkey];
         }
-      }else {
+      } else {
         a[key] = b[key];
       }
     }
@@ -54,9 +59,10 @@ export default function mergeJSXProps (objs) {
   }, {});
 };
 
-function mergeFn (a, b) {
+function mergeFn(a, b) {
   return function () {
     a && a.apply(this, arguments);
     b && b.apply(this, arguments);
   };
 }
+export * from './dynamicRender';
