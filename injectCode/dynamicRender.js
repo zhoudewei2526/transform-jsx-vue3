@@ -1,11 +1,12 @@
-import { h, withDirectives } from "vue";
+var h = require("vue").h
+var withDirectives = require("vue").withDirectives
 function isObject(val) {
     return val !== null && typeof val === 'object';
 }
 function isVNode(value) {
     return value ? value._isVNode === true : false;
 }
-export function dynamicRender(type, propsOrChildren) {
+module.exports = function dynamicRender(type, propsOrChildren) {
     if (arguments.length > 1 && isObject(propsOrChildren) && !Array.isArray(propsOrChildren) && !isVNode(propsOrChildren)) {
         let directives = propsOrChildren["directives"];
         if (directives && directives.length > 0) {

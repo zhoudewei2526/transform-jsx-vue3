@@ -1,6 +1,6 @@
 {
-  "name": "transform-jsx-vue3",
-  "version": "0.1.0",
+  "name": "babel-plugin-transform-jsx-vue3",
+  "version": "0.1.6",
   "description": "transform jsx in vue3",
   "main": "index.js",
   "scripts": {
@@ -20,9 +20,6 @@
   "dependencies": {
     "esutils": "^2.0.2",
     "vue": "3.0.0-alpha.8"
-  },
-  "peerDependencies": {
-    "babel-helper-vue-jsx-merge-props": "^2.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
