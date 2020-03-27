@@ -1,4 +1,5 @@
 var h = require("vue").h
+var resolveDirective = require("vue").resolveDirective
 var withDirectives = require("vue").withDirectives
 function isObject(val) {
     return val !== null && typeof val === 'object';
@@ -11,10 +12,10 @@ module.exports = function dynamicRender(type, propsOrChildren) {
         let directives = propsOrChildren["directives"];
         if (directives && directives.length > 0) {
             let directivesArr = directives.map(item => {
-                return [item.dir, item.value, item.arg, item.modifiers];
+                return [item.dir?item.dir: resolveDirective(item.name), item.value, item.arg, item.modifiers];
             });
-            return withDirectives(h(...arguments), directivesArr);
+            return withDirectives(h.call(this,...arguments), directivesArr);
         }
     }
-    return h(...arguments);
+    return h.call(this,...arguments);
 }

@@ -42,10 +42,8 @@ module.exports = function (babel) {
         path.traverse({
           'ObjectMethod|ClassMethod' (path) {
             const params = path.get('params')
-            // remove h if there is (h) param
-            if (params.length && params[0].node.name === 'h') {
-              params[0].remove();
-            }
+            
+            
             // do nothing if there is no JSX inside
             const jsxChecker = {
               hasJsx: false
@@ -61,6 +59,10 @@ module.exports = function (babel) {
             // do nothing if this method is a part of JSX expression
             if (isInsideJsxExpression(t, path)) {
               return
+            }
+            // remove h if there is (h) param
+            if (params.length && params[0].node.name === 'h') {
+              params[0].remove();
             }
             // inject h otherwise
             var h = file.addImport('babel-plugin-transform-jsx-vue3/injectCode', 'dynamicRender', '_h_render');
