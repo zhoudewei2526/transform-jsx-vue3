@@ -1,6 +1,5 @@
 var esutils = require('esutils')
 var groupProps = require('./lib/group-props')
-var mustUseProp = require('./lib/must-use-prop')
 
 var isInsideJsxExpression = function (t, path) {
   if (!path.parentPath) {
