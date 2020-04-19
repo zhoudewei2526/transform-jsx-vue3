@@ -2,9 +2,7 @@
 let nestRE = /^(on|nativeOn|class|style|hook)$/;
 // 首字母转为大写
 function firstWordCase(nestedKey) {
-  let nestedKeyArr = nestedKey.split('');
-  let upperCaseKey = nestedKeyArr.splice(0, 1, nestedKeyArr[0].toUpperCase()).join('');
-  return upperCaseKey;
+  return nestedKey.replace(/^[a-z]/,(val)=>{return val.toUpperCase()});
 }
 module.exports = function mergeJSXProps(objs) {
   if(objs.length===1){
@@ -13,9 +11,9 @@ module.exports = function mergeJSXProps(objs) {
   return objs.reduce(function (a, b) {
     let aa, bb, key, nestedKey, temp;
     for (key in b) {
-      aa = a[key];
+      aa = a[key]||{};
       bb = b[key];
-      if (aa && nestRE.test(key)) {
+      if (nestRE.test(key)) {
         // 处理class，如果数据对象是形如{class:'classA'}的，则处理成{class:{'classA':true}}
         if (key === 'class') {
           if (typeof aa === 'string') {
@@ -28,6 +26,7 @@ module.exports = function mergeJSXProps(objs) {
             b[key] = bb = {};
             bb[temp] = true;
           }
+          continue;
         }
         let isHook = false;
         
