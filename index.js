@@ -86,11 +86,11 @@ module.exports = function (babel) {
                 return
               }
 
-              const attr = attribute.node.name
+              // const attr = attribute.node.name
 
-              if (mustUseProp(tag, type, attr) && t.isJSXExpressionContainer(attributePath.node.value)) {
-                attribute.replaceWith(t.JSXIdentifier(`domProps-${attr}`))
-              }
+              // if (mustUseProp(tag, type, attr) && t.isJSXExpressionContainer(attributePath.node.value)) {
+              //   attribute.replaceWith(t.JSXIdentifier(`domProps-${attr}`))
+              // }
             })
           }
         })
